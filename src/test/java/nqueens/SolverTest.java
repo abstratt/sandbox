@@ -12,6 +12,7 @@ public class SolverTest<S extends Solver> {
         solver = createSolver();
     }
 
+    @SuppressWarnings("unchecked")
     protected S createSolver() {
         return (S) new Solver();
     }
