@@ -1,11 +1,8 @@
 package nqueens;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-
 public class Square {
-	int row;
-	int column;
+	private int row;
+	private int column;
 	public Square(int row, int column) {
 		this.row = row;
 		this.column = column;
@@ -24,36 +21,23 @@ public class Square {
 	}
 
 	static boolean sameLine(int rowA, int columnA, int rowB, int columnB, int rowC, int columnC) {
-		double angleAB = computeAngleDouble(rowA, columnA, rowB, columnB);
-		double angleAC = computeAngleDouble(rowA, columnA, rowC, columnC);
+		double angleAB = computeAngularCoefficient(rowA, columnA, rowB, columnB);
+		double angleAC = computeAngularCoefficient(rowA, columnA, rowC, columnC);
 		return sameNumber(angleAB, angleAC);
 	}
 	
 	public static boolean sameLine(Square a, Square b, Square c) {
-		if (a.doesThreat(b) || a.doesThreat(c) || b.doesThreat(c)) {
-			return a.doesThreat(b) && a.doesThreat(c) && b.doesThreat(c);
+		if (a.isThreatTo(b) || a.isThreatTo(c) || b.isThreatTo(c)) {
+			return a.isThreatTo(b) && a.isThreatTo(c) && b.isThreatTo(c);
 		}
 		return sameLine(a.row, a.column, b.row, b.column, c.row, c.column);
 	}
 	
-	public BigDecimal computeAngle(Square another) {
-		BigDecimal angle = computeAngle(this, another);
-		return angle;
-	}
-
-	private static BigDecimal computeAngle(Square a, Square b) {
-		return computeAngle(a.row, a.column, b.row, b.column);
-	}
-
-	static BigDecimal computeAngle(int aRow, int aColumn, int bRow, int bColumn) {
-		return new BigDecimal(aRow - bRow).divide(new BigDecimal(aColumn - bColumn), 10, RoundingMode.HALF_EVEN);
-	}
-	
-	static double computeAngleDouble(int aRow, int aColumn, int bRow, int bColumn) {
+	static double computeAngularCoefficient(int aRow, int aColumn, int bRow, int bColumn) {
 		return ((double) (aRow - bRow))/(aColumn - bColumn);
 	}
 
-	public boolean doesThreat(Square another) {
+	public boolean isThreatTo(Square another) {
 		return this.row == another.row || this.column == another.column || sameDiagonal(another);
 	}
 
@@ -66,7 +50,7 @@ public class Square {
 	}
 
 	static boolean sameDiagonal(int thisRow, int thisColumm, int anotherRow, int anotherColumn) {
-		double angle = Math.abs(computeAngleDouble(thisRow, thisColumm, anotherRow, anotherColumn));
+		double angle = Math.abs(computeAngularCoefficient(thisRow, thisColumm, anotherRow, anotherColumn));
 		return sameNumber(angle, 1d);
 	}
 

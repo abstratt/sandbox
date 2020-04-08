@@ -10,49 +10,19 @@ import java.util.Set;
 import nqueens.Solver.InvalidSolutionException;
 import nqueens.Solver.Reason;
 
+/**
+ * Represents a board with pieces.
+ */
 public class Board {
 	private int gridSize;
 	private Set<Square> occupied;
 	
-	public boolean isValid() {
-		if (gridSize != occupied.size()) {
-			return false;
-		}
-		return true;
-	}
-	
-	public void checkSolution() throws InvalidSolutionException {
-		if (gridSize < 4) {
-			throw new InvalidSolutionException(Reason.GridToSmall, "gridSize = " + gridSize);
-		}
-		if (gridSize > occupied.size()) {
-			throw new InvalidSolutionException(Reason.NotEnoughQueens);
-		}
-		Square[] asArray = occupied.toArray(new Square[0]);
-		// brute force, we can be slow but we can't be wrong
-		for (int i = 0; i < asArray.length - 1; i++) {
-			for (int j = i+1; j < asArray.length; j++) {
-				if (asArray[i].doesThreat(asArray[j])) {
-					throw new InvalidSolutionException(Reason.QueensUnderThreat, asArray[i] + " x " + asArray[j] + "\n" + this.toString());	
-				}
-				for (int k = 0; k < asArray.length; k++) {
-					if (k != i && k != j) {
-						if (asArray[i].sameLineAs(asArray[j], asArray[k])) {
-							throw new InvalidSolutionException(Reason.ThreeQueensOnSameLine, asArray[i] + " x " + asArray[j] + " x " + asArray[k] + "\n" + this.toString());		
-						}
-					}
-				}
-			}
-		}
-		return;
-	}
-
 	public Board(int gridSize, Collection<Square> occupied) {
 		this.gridSize = gridSize;
 		this.occupied = new HashSet<>(occupied);
 		for (Square square : occupied) {
-			assert square.row <= gridSize;
-			assert square.column <= gridSize;
+			assert square.getRow() < gridSize;
+			assert square.getColumn() < gridSize;
 		}
 	}
 	
@@ -75,11 +45,44 @@ public class Board {
 		}
 		return asSet;
 	}
+	
+    /**
+     * Validates independently a solution for the n-queens problem.
+     * 
+     * @throws InvalidSolutionException if the solution is invalid
+     */
+    public void checkSolution() throws InvalidSolutionException {
+        if (gridSize > occupied.size()) {
+            throw new InvalidSolutionException(Reason.NotEnoughQueens);
+        }
+        Square[] asArray = occupied.toArray(new Square[0]);
+        // brute force, we can be slow but we can't be wrong
+        for (int i = 0; i < asArray.length - 1; i++) {
+            for (int j = i+1; j < asArray.length; j++) {
+                if (asArray[i].isThreatTo(asArray[j])) {
+                    throw new InvalidSolutionException(Reason.QueensUnderThreat, asArray[i] + " x " + asArray[j] + "\n" + this.toString()); 
+                }
+                for (int k = 0; k < asArray.length; k++) {
+                    if (k != i && k != j) {
+                        if (asArray[i].sameLineAs(asArray[j], asArray[k])) {
+                            throw new InvalidSolutionException(Reason.ThreeQueensOnSameLine, asArray[i] + " x " + asArray[j] + " x " + asArray[k] + "\n" + this.toString());        
+                        }
+                    }
+                }
+            }
+        }
+        return;
+    }
 
+    public Collection<Square> getOccupied() {
+        return occupied;
+    }
+
+    @Override
 	public String toString() {
 		boolean[][] grid = new boolean[gridSize][gridSize];
 		for (Square pos : occupied) {
-			grid[pos.row][pos.column] = true;
+			grid[pos.getRow()][pos.getColumn()] = true;
 		}
 		StringBuffer result = new StringBuffer();
 		result.append("  ");
@@ -98,9 +101,5 @@ public class Board {
 			result.append("|\n");
 		}
 		return result.toString();
-	}
-
-	public Collection<Square> getOccupied() {
-		return occupied;
 	}
 }

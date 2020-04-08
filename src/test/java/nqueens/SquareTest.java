@@ -1,18 +1,8 @@
 package nqueens;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
-
-import java.util.Arrays;
-import java.util.BitSet;
-import java.util.Collection;
-import java.util.LinkedHashSet;
-import java.util.function.Consumer;
 
 import org.junit.jupiter.api.Test;
-
-import nqueens.Solver.InvalidSolutionException;
-import nqueens.Solver.Reason;
 
 public class SquareTest {
 	@Test
@@ -51,7 +41,7 @@ public class SquareTest {
 	}
 
 	@Test
-	public void doesThreat() {
+	public void isThreat() {
 		checkThreat(true, 1, 1, 7, 7);
 		checkThreat(true, 1, 3, 4, 3);
 		checkThreat(true, 1, 2, 4, 5);
@@ -60,10 +50,10 @@ public class SquareTest {
 	}
 
 	private void checkThreat(boolean expected, int row1, int column1, int row2, int column2) {
-		assertEquals(expected, new Square(row1, column1).doesThreat(new Square(row2, column2)));
-		assertEquals(expected, new Square(row2, column2).doesThreat(new Square(row1, column1)));
-		assertEquals(expected, new Square(column1, row1).doesThreat(new Square(column2, row2)));
-		assertEquals(expected, new Square(column2, row2).doesThreat(new Square(column1, row1)));
+		assertEquals(expected, new Square(row1, column1).isThreatTo(new Square(row2, column2)));
+		assertEquals(expected, new Square(row2, column2).isThreatTo(new Square(row1, column1)));
+		assertEquals(expected, new Square(column1, row1).isThreatTo(new Square(column2, row2)));
+		assertEquals(expected, new Square(column2, row2).isThreatTo(new Square(column1, row1)));
 	}
 
 	@Test
