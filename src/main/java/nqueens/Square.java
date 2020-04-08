@@ -3,9 +3,14 @@ package nqueens;
 public class Square {
 	private int row;
 	private int column;
+
 	public Square(int row, int column) {
 		this.row = row;
 		this.column = column;
+	}
+
+	public static Square of(int row, int column) {
+		return new Square(row, column);
 	}
 
 	public int getRow() {
@@ -25,16 +30,16 @@ public class Square {
 		double angleAC = computeAngularCoefficient(rowA, columnA, rowC, columnC);
 		return sameNumber(angleAB, angleAC);
 	}
-	
+
 	public static boolean sameLine(Square a, Square b, Square c) {
 		if (a.isThreatTo(b) || a.isThreatTo(c) || b.isThreatTo(c)) {
 			return a.isThreatTo(b) && a.isThreatTo(c) && b.isThreatTo(c);
 		}
 		return sameLine(a.row, a.column, b.row, b.column, c.row, c.column);
 	}
-	
+
 	static double computeAngularCoefficient(int aRow, int aColumn, int bRow, int bColumn) {
-		return ((double) (aRow - bRow))/(aColumn - bColumn);
+		return ((double) (aRow - bRow)) / (aColumn - bColumn);
 	}
 
 	public boolean isThreatTo(Square another) {
@@ -82,7 +87,7 @@ public class Square {
 			return false;
 		return true;
 	}
-	
+
 	@Override
 	public String toString() {
 		return row + ":" + column;

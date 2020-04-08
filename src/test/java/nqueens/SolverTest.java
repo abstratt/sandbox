@@ -1,54 +1,65 @@
 package nqueens;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+
+import nqueens.Solver.UnsolvableException;
 
 public class SolverTest<S extends Solver> {
 
-    protected S solver;
+	protected S solver;
 
-    @BeforeEach
-    public void initSolver() {
-        solver = createSolver();
-    }
+	@BeforeEach
+	public void initSolver() {
+		solver = createSolver();
+	}
 
-    @SuppressWarnings("unchecked")
-    protected S createSolver() {
-        return (S) new Solver();
-    }
+	@SuppressWarnings("unchecked")
+	protected S createSolver() {
+		return (S) new Solver();
+	}
 
-    protected S getSolver() {
-        return solver;
-    }
+	protected S getSolver() {
+		return solver;
+	}
 
-    @Test
-    public void solve08() {
-        getSolver().solve(8).checkSolution();
-    }
+	@ParameterizedTest
+	@ValueSource(ints = { 2, 3, 5, 6, 7 })
+	public void unsolvable(int size) {
+		assertThrows(UnsolvableException.class, () -> getSolver().solve(size));
+	}
 
-    @Test
-    public void solve10() {
-        getSolver().solve(10).checkSolution();
-    }
+	@ParameterizedTest
+	@ValueSource(ints = { 1, 4, 8, 9 })
+	public void solveTiny(int size) {
+		solveAndCheck(size);
+	}
 
-    @Test
-    public void solve15() {
-        getSolver().solve(15).checkSolution();
-    }
+	@ParameterizedTest
+	@ValueSource(ints = { 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20 })
+	public void solveSmall(int size) {
+		solveAndCheck(size);
+	}
 
-    @Test
-    public void solve20() {
-        getSolver().solve(20).checkSolution();
-    }
+	@ParameterizedTest
+	@ValueSource(ints = { 21, 22, 23, 24, 25 })
+	public void solveMedium(int size) {
+		solveAndCheck(size);
+	}
 
-    @Test
-    public void solve25() {
-        getSolver().solve(25).checkSolution();
-    }
-    
-    @Test
-    public void solve26() {
-        getSolver().solve(26).checkSolution();
-    }
+	@ParameterizedTest
+	@ValueSource(ints = { 26, 27 })
+	@EnabledIfSystemProperty(named = "nqueens.slowTests", matches = "true")
+	public void solveSlow(int size) {
+		solveAndCheck(size);
+	}
+
+	protected void solveAndCheck(int size) {
+		getSolver().solve(size).checkSolution();
+	}
 
 }

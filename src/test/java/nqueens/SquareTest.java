@@ -58,11 +58,11 @@ public class SquareTest {
 
 	@Test
 	public void checkNoDiagonal() {
-		assertEquals(false, Solver.checkNoDiagonal(new int[] {0, 3, 1, 2}, 3));
-		assertEquals(true, Solver.checkNoDiagonal(new int[] {1, 3, 0, 2}, 3));
-		assertEquals(true, Solver.checkNoDiagonal(new int[] {0, 3, 1, -1}, 3));
-		assertEquals(false, Solver.checkNoDiagonal(new int[] {0, -1, 1, 3}, 3));
-		assertEquals(true, Solver.checkNoDiagonal(new int[] {0, -1, 3, 1}, 3));
-		assertEquals(false, Solver.checkNoDiagonal(new int[] {0, -1, 1, 2}, 3));
+		assertEquals(false, Solver.checkNoDiagonal(new int[] { 0, 3, 1, 2 }, 3));
+		assertEquals(true, Solver.checkNoDiagonal(new int[] { 1, 3, 0, 2 }, 3));
+		assertEquals(true, Solver.checkNoDiagonal(new int[] { 0, 3, 1, -1 }, 3));
+		assertEquals(false, Solver.checkNoDiagonal(new int[] { 0, -1, 1, 3 }, 3));
+		assertEquals(true, Solver.checkNoDiagonal(new int[] { 0, -1, 3, 1 }, 3));
+		assertEquals(false, Solver.checkNoDiagonal(new int[] { 0, -1, 1, 2 }, 3));
 	}
 }

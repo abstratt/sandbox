@@ -1,17 +1,18 @@
 package nqueens;
 
-import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
+import java.util.concurrent.FutureTask;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.SynchronousQueue;
-import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -22,63 +23,64 @@ import java.util.stream.IntStream;
 public class MTSolver extends Solver {
 	private ExecutorService executors = createExecutor();
 
-	private volatile AtomicBoolean shouldCancel;
+	/**
+	 * Set when one solution is found so any ongoing resolution attempts can be
+	 * aborted.
+	 */
+	private volatile boolean shouldCancel;
 
 	@Override
-    public synchronized Board solve(int gridSize) {
-        if (gridSize <= 16) {
-            return doSolveSequentially(gridSize);
-        }
-        return doSolveInParallel(gridSize);
-    }
-	
-    private Board doSolveSequentially(int gridSize) {
-        return new Solver().solve(gridSize);
-    }
-
-    private Board doSolveInParallel(int gridSize) {
-        int generation = new Random().nextInt();
-        shouldCancel = new AtomicBoolean();
-        shouldCancel.set(false);
-
-		BlockingQueue<int[]> results = new LinkedBlockingQueue<>(1);
-		
-		// attempts to find solutions in separate threads
-		List<Request> partialSolvers = IntStream.range(0, gridSize)
-				.mapToObj(firstColumn -> new Request(generation, firstColumn, generateVersion(gridSize, firstColumn), results::offer))
-				.collect(Collectors.toList());
-		
-		partialSolvers.forEach(solver -> executors.submit(solver::solveRemainder));
-		int[] result = null;
-		while (result == null) {
-			try {
-				result = results.take();
-			} catch (InterruptedException e) {
-				// not interruptable
-			}
+	protected synchronized int[] doSolve(int gridSize) {
+		if (gridSize <= 16) {
+			return doSolveSequentially(gridSize);
 		}
-		partialSolvers.forEach(Request::cancel);
-        shouldCancel.lazySet(true);
-        
-		return asBoard(result);
-    }
-	
+		return doSolveInParallel(gridSize);
+	}
+
+	private int[] doSolveSequentially(int gridSize) {
+		return super.doSolve(gridSize);
+	}
+
+	private int[] doSolveInParallel(int gridSize) {
+		int generation = new Random().nextInt();
+		shouldCancel = false;
+
+		BlockingQueue<Optional<int[]>> results = new LinkedBlockingQueue<>();
+
+		// attempts to find solutions in separate threads
+		List<FutureTask<int[]>> partialSolvers = IntStream.range(0, gridSize)
+				.mapToObj(firstColumn -> new Request(generation, firstColumn, generateVersion(gridSize, firstColumn), 1,
+						results::add))
+				.map(request -> new FutureTask<int[]>(request::solveRemainder, null)).collect(Collectors.toList());
+
+		partialSolvers.forEach(executors::execute);
+		Optional<int[]> result = null;
+		try {
+			for (int i = 0; i < gridSize - 1 && !(result = results.take()).isPresent(); i++)
+				;
+			shouldCancel = true;
+		} catch (InterruptedException e) {
+			// interruption leads to no results...
+		}
+		return result.orElseThrow(() -> new UnsolvableException());
+	}
+
 	@Override
 	protected boolean solveStage(int[] rowSelection, int currentColumn) {
-	    if (shouldCancel == null || shouldCancel.get()) {
-	        throw new AbortedComputationException();
-	    }
-	    return super.solveStage(rowSelection, currentColumn);
+		if (shouldCancel) {
+			throw new AbortedComputationException();
+		}
+		return super.solveStage(rowSelection, currentColumn);
 	}
-	
+
 	/**
-	 * Generates a partially defined potential solution that selects
-	 * the given selected row for the first column.
+	 * Generates a partially defined potential solution that selects the given
+	 * selected row for the first column.
 	 * 
 	 * @param gridSize
 	 * @param selectedRow
-	 * @return an array of row selections per column with only a row selection for 
-	 * the first column
+	 * @return an array of row selections per column with only a row selection for
+	 *         the first column
 	 */
 	private int[] generateVersion(int gridSize, int selectedRow) {
 		int[] rowSelection = new int[gridSize];
@@ -86,68 +88,76 @@ public class MTSolver extends Solver {
 		rowSelection[selectedRow] = 0;
 		return rowSelection;
 	}
-	
-	private class Request {
-	    private int[] partial;
-	    private Consumer<int[]> resultConsumer;
-        private Object requestId;
-        private Object generation;
-	    public Request(Object generation, Object requestId, int[] partial, Consumer<int[]> resultConsumer) {
-	        this.requestId = requestId;
-	        this.generation = generation;
-            this.partial = partial;
-            this.resultConsumer = resultConsumer;
-        }
-	    /**
-	     * Tries to solve the n-queens problem based on a partial solution.
-	     */
-        void solveRemainder() {
-            log("Request started " + this.asSimpleString());
-            try {
-                boolean solved = solveStage(partial, 1);
-                log("Request completed " + this);
-                if (solved) {
-                	resultConsumer.accept(partial);
-                }
-            } catch (AbortedComputationException e) {
-                // business as usual, some other request got to the answer first
-                log("Request aborted" + this);
-            }
-        }
-        
-        void cancel() {
-            
-        }
-        
-        @Override
-        public String toString() {
-            return asSimpleString() + "\n" + asBoard(partial);
-        }
-        
-        public String asSimpleString() {
-            return generation + " - id: " + requestId;
-        }
-	}
-	
-    public void shutdown() {
-        log("Terminating execution service");
-        executors.shutdownNow();
-    }
 
-    private ExecutorService createExecutor() {
-        ThreadFactory threadFactory = (Runnable runnable) -> {
-            Thread newThread = new Thread(runnable);
-            newThread.setUncaughtExceptionHandler((thread, throwable) -> throwable.printStackTrace());
-            return newThread;
-        };
-        ExecutorService newExecutor = new ThreadPoolExecutor(4, 40,
-                2, TimeUnit.SECONDS,
-                new SynchronousQueue<Runnable>(),
-                threadFactory);
-        return newExecutor;
-    }
-    
-    private static void log(String toLog) {
-        System.out.println(Instant.now().toString() + ": " + toLog);
-    }
+	/**
+	 * A solution request for a partially configured board.
+	 */
+	private class Request {
+		private int[] partial;
+		private Consumer<Optional<int[]>> resultConsumer;
+		private Object requestId;
+		private Object generation;
+		private int columnsToIgnore;
+
+		public Request(Object generation, Object requestId, int[] partial, int columnsToIgnore,
+				Consumer<Optional<int[]>> resultConsumer) {
+			this.requestId = requestId;
+			this.generation = generation;
+			this.partial = partial;
+			this.columnsToIgnore = columnsToIgnore;
+			this.resultConsumer = resultConsumer;
+		}
+
+		/**
+		 * Tries to solve the n-queens problem based on a partial solution.
+		 */
+		void solveRemainder() {
+			debug(() -> "Request started " + this.asSimpleString());
+			try {
+				boolean solved = solveStage(partial, columnsToIgnore);
+				debug(() -> "Request completed " + this + " - Solved? " + solved);
+				resultConsumer.accept(Optional.ofNullable(solved ? partial : null));
+			} catch (AbortedComputationException e) {
+				// business as usual, some other request got to the answer first
+				debug(() -> "Request aborted - " + this);
+				resultConsumer.accept(Optional.empty());
+			}
+		}
+
+		@Override
+		public String toString() {
+			return asSimpleString() + "\n" + asBoard(partial);
+		}
+
+		public String asSimpleString() {
+			return generation + " - id: " + requestId;
+		}
+	}
+
+	public static class AbortedComputationException extends RuntimeException {
+		private static final long serialVersionUID = 1L;
+	}
+
+	public void shutdown() {
+		debug(() -> "Terminating execution service");
+		executors.shutdownNow();
+	}
+
+	private ExecutorService createExecutor() {
+		ExecutorService newExecutor = new ThreadPoolExecutor(4, 40, 2, TimeUnit.SECONDS,
+				new SynchronousQueue<Runnable>()) {
+			protected void afterExecute(Runnable r, Throwable t) {
+				if (t != null) {
+					t.printStackTrace();
+				} else if (r instanceof Future) {
+					try {
+						((Future<?>) r).get();
+					} catch (InterruptedException | ExecutionException e) {
+						debug(e);
+					}
+				}
+			}
+		};
+		return newExecutor;
+	}
 }

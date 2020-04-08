@@ -16,11 +16,17 @@ The tests should help understand the expectations for those classes.
 ##### With Gradle
 
 ```
-gradle test
+gradle test [-Dprop1=value1] [-Dprop2=value2]
 ```
 
 ##### With Maven
 ```
-mvn test
+mvn test [-Dprop1=value1] [-Dprop2=value2]
 ```
+
+
+##### System properties
+
+* nqueens.slowTests (boolean) - Some test cases take too long to complete and hence are disabled by default. In order to run them, specify the -Dnqueens.slowTests=true property.
+* nqueens.debug (boolean) - Some code produces logging information which may be helpful in debugging. To enable debugging, pass "true" to this property. 
 
