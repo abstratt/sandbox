@@ -8,6 +8,7 @@ import java.util.BitSet;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 import org.junit.jupiter.api.Test;
 
@@ -70,12 +71,12 @@ public class BoardTest {
 		).checkSolution();
 	}
 
-	private void checkBadSolution(Consumer<Reason> consumer, Board board) {
+	private void checkBadSolution(Predicate<Reason> consumer, Board board) {
 		try {
 			board.checkSolution();
 			fail(() -> "should have failed");
 		} catch (InvalidSolutionException e) {
-			consumer.accept(e.getReason());
+			assert consumer.test(e.getReason());
 		}
 	}
 
