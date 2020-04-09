@@ -19,38 +19,6 @@ public class Solver {
 
 	protected static final int EMPTY = -1;
 
-	public static class InvalidSolutionException extends RuntimeException {
-
-		private static final long serialVersionUID = 1L;
-
-		private Reason reason;
-
-		public InvalidSolutionException(Reason reason) {
-			this(reason, "");
-		}
-
-		public InvalidSolutionException(Reason reason, String message) {
-			super(reason + " - " + message);
-			this.reason = reason;
-		}
-
-		public Reason getReason() {
-			return reason;
-		}
-	}
-
-	public static class UnsolvableException extends RuntimeException {
-
-		private static final long serialVersionUID = 1L;
-
-		public UnsolvableException() {
-		}
-	}
-
-	enum Reason {
-		NotEnoughQueens, QueensUnderThreat, ThreeQueensOnSameLine
-	}
-
 	/**
 	 * Solves the n-queens problem for a grid size 4 or bigger.
 	 * 

@@ -11,8 +11,7 @@ import java.util.function.Consumer;
 
 import org.junit.jupiter.api.Test;
 
-import nqueens.Solver.InvalidSolutionException;
-import nqueens.Solver.Reason;
+import nqueens.InvalidSolutionException.Reason;
 
 public class BoardTest {
 	@Test

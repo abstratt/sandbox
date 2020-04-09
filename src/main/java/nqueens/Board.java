@@ -7,8 +7,7 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import nqueens.Solver.InvalidSolutionException;
-import nqueens.Solver.Reason;
+import nqueens.InvalidSolutionException.Reason;
 
 /**
  * Represents a board with pieces.
@@ -56,10 +55,8 @@ public class Board {
 				throw new InvalidSolutionException(Reason.NotEnoughQueens);
 			}
 		} else {
-			// 2 or 3
-			if (gridSize-1 > occupied.size()) {
-				throw new InvalidSolutionException(Reason.NotEnoughQueens);
-			}
+			// 2 or 3 - no solution
+			throw new InvalidSolutionException(Reason.Unsolvable);
 		}
 		Square[] asArray = occupied.toArray(new Square[0]);
 		// brute force, we can be slow but we can't be wrong

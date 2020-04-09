@@ -7,8 +7,6 @@ import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import nqueens.Solver.UnsolvableException;
-
 public class SolverTest<S extends Solver> {
 
 	protected S solver;
