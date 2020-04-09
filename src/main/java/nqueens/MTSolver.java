@@ -13,6 +13,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -41,23 +42,27 @@ public class MTSolver extends Solver {
 		return super.doSolve(gridSize);
 	}
 
+	/**
+	 * Attempts to find solutions in separate threads, based on a different choice of row for the first column.
+	 * 
+	 * @param gridSize
+	 * @return
+	 */
 	private int[] doSolveInParallel(int gridSize) {
 		int generation = new Random().nextInt();
 		shouldCancel = false;
 
 		BlockingQueue<Optional<int[]>> results = new LinkedBlockingQueue<>();
-
-		// attempts to find solutions in separate threads
+		AtomicInteger requestId = new AtomicInteger();
 		List<FutureTask<int[]>> partialSolvers = IntStream.range(0, gridSize)
-				.mapToObj(firstColumn -> new Request(generation, firstColumn, generateVersion(gridSize, firstColumn), 1,
-						results::add))
+				.mapToObj(firstColumn -> generateVersion(gridSize, firstColumn))
+				.map(version -> new Request(generation, requestId.incrementAndGet(), version, 1, results::add))
 				.map(request -> new FutureTask<int[]>(request::solveRemainder, null)).collect(Collectors.toList());
 
 		partialSolvers.forEach(executors::execute);
 		Optional<int[]> result = null;
 		try {
-			for (int i = 0; i < gridSize - 1 && !(result = results.take()).isPresent(); i++)
-				;
+			for (int i = 0; i < gridSize - 1 && !(result = results.take()).isPresent(); i++);
 			shouldCancel = true;
 		} catch (InterruptedException e) {
 			// interruption leads to no results...
