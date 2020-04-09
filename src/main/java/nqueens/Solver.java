@@ -156,8 +156,6 @@ public class Solver {
 						&& rowsSelected[point2] != EMPTY) {
 					if (Square.sameLine(point1, rowsSelected[point1], point2, rowsSelected[point2], rowToTry,
 							rowsSelected[rowToTry])) {
-						debug("sameLine: " + Arrays.asList(Square.of(point1, rowsSelected[point1]),
-								Square.of(point2, rowsSelected[point2]), Square.of(rowToTry, rowsSelected[rowToTry])));
 						return false;
 					}
 				}
@@ -179,8 +177,6 @@ public class Solver {
 		for (int otherRow = 0; otherRow < rowsSelected.length; otherRow++) {
 			if (otherRow != rowToTry && rowsSelected[otherRow] != EMPTY
 					&& Square.sameDiagonal(rowToTry, rowsSelected[rowToTry], otherRow, rowsSelected[otherRow])) {
-				debug("sameDiagonal: " + Arrays.asList(Square.of(otherRow, rowsSelected[otherRow]),
-						Square.of(rowToTry, rowsSelected[rowToTry])));
 				return false;
 			}
 		}
@@ -203,8 +199,8 @@ public class Solver {
 		debug(toDebug::toString);
 	}
 
-	public static void debug(Throwable t) {
-		t.printStackTrace(System.out);
+	public static void error(Throwable throwable) {
+		throwable.printStackTrace(System.out);
 	}
 
 }

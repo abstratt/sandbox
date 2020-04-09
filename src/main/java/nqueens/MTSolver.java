@@ -153,7 +153,7 @@ public class MTSolver extends Solver {
 					try {
 						((Future<?>) r).get();
 					} catch (InterruptedException | ExecutionException e) {
-						debug(e);
+						error(e);
 					}
 				}
 			}
