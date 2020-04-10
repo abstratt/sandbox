@@ -67,7 +67,7 @@ public class MTSolver extends Solver {
 		} catch (InterruptedException e) {
 			// interruption leads to no results...
 		}
-		return result.orElseThrow(() -> new UnsolvableException());
+		return result.orElseThrow(UnsolvableException::new);
 	}
 
 	@Override
