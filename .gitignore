@@ -5,6 +5,3 @@ target/
 .settings/
 /.gradle/
 /build/
-gradlew*
-gradlew*.*
-gradle/
