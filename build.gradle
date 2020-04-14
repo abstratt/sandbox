@@ -4,7 +4,6 @@
 
 plugins {
     id 'java'
-    id 'maven-publish'
 }
 
 repositories {
@@ -14,8 +13,12 @@ repositories {
     }
 }
 
-test {
+test {0
     useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed", "standardOut", "standardError"
+    }
+    testLogging.showStandardStreams = true
 }
 
 dependencies {
@@ -26,10 +29,3 @@ group = 'n-queens'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
 
-publishing {
-    publications {
-        maven(MavenPublication) {
-            from(components.java)
-        }
-    }
-}
