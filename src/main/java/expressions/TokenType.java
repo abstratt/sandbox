@@ -1,12 +1,7 @@
 package expressions;
 
 enum TokenType {
-	Number, 
-	Plus,
-	Minus,
-	MultOrDiv,
-	OpenBrace,
-	CloseBrace;
+	Number, Plus, Minus, MultOrDiv, OpenBrace, CloseBrace;
 
 	static TokenType forText(String asText) {
 		if ("(".equals(asText)) {

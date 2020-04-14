@@ -12,12 +12,12 @@ public class NegativeExpression extends Expression {
 	int doEvaluate() {
 		return -childExpression.evaluate();
 	}
-	
+
 	@Override
 	public String toString() {
 		return "-" + childExpression.toString();
 	}
-	
+
 	@Override
 	public Expression negative() {
 		return childExpression;
