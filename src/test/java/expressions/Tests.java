@@ -14,17 +14,18 @@ class Tests {
 		assertEquals("-1", parser.parse("(-1)").toString());
 		assertEquals("[1 + [3 + 5]]", parser.parse("1+3+5").toString());
 		assertEquals("[1 + [-3 + 5]]", parser.parse("1-3+5").toString());
-		assertEquals("[[1 * [2 + 3]] + 4]", parser.parse("1 * ( 2 + 3 ) + 4").toString());
-		assertEquals("[1 + [3 + 5]]", parser.parse("1 + ( 3 + 5 )").toString());
-		assertEquals("[1 + [3 * 5]]", parser.parse("1 + 3 * 5").toString());
-		assertEquals("[[1 * 3] + 5]", parser.parse("1 * 3 + 5").toString());
-		assertEquals("[1 * [3 + 5]]", parser.parse("1 * ( 3 + 5 )").toString());
-		assertEquals("[[1 + 3] * 5]", parser.parse("( 1 + 3 ) * 5").toString());
-		assertEquals("[[1 * 3] * 5]", parser.parse("1 * 3 * 5").toString());
-		assertEquals("[1 + [[2 * 3] + 4]]", parser.parse("1 + 2 * 3 + 4").toString());
-		assertEquals("[1 + [-2 + 3]]", parser.parse("1 - 2 + 3").toString());
-		assertEquals("[1 + -[2 + 3]]", parser.parse("1 - ( 2 + 3 )").toString());
-		assertEquals("[1 + [-2 * 3]]", parser.parse("1 - 2 * 3").toString());
+		assertEquals("[[1 * [2 + 3]] + 4]", parser.parse("1*(2+3)+4").toString());
+		assertEquals("[1 + [3 + 5]]", parser.parse("1+(3+5)").toString());
+		assertEquals("[1 + [3 * 5]]", parser.parse("1+3*5").toString());
+		assertEquals("[[1 * 3] + 5]", parser.parse("1*3+5").toString());
+		assertEquals("[1 * [3 + 5]]", parser.parse("1*(3+5)").toString());
+		assertEquals("[[1 + 3] * 5]", parser.parse("(1+3)*5").toString());
+		assertEquals("[[1 * 3] * 5]", parser.parse("1*3*5").toString());
+		assertEquals("[1 + [[2 * 3] + 4]]", parser.parse("1+2*3+4").toString());
+		assertEquals("[1 + [-2 + 3]]", parser.parse("1-2+3").toString());
+		assertEquals("[1 + -[2 + 3]]", parser.parse("1-(2+3)").toString());
+		assertEquals("[1 + [-2 * 3]]", parser.parse("1-2*3").toString());
+		assertEquals("[[-2 * -3] + 1]", parser.parse("-2*-3+1").toString());
 
 	}
 
@@ -42,7 +43,9 @@ class Tests {
 		assertEquals(5, evaluator.evaluate("1-3*2+10"));
 		assertEquals(138, evaluator.evaluate("2*(3-4*(-5+1))+100"));
 		assertEquals(62, evaluator.evaluate("-2*(3-4*(-5+1))+100"));
-
+		assertEquals(-5, evaluator.evaluate("-2*3+1"));
+		assertEquals(7, evaluator.evaluate("-2*-3+1"));
+		assertEquals(10, evaluator.evaluate("-(-10)"));
 	}
 
 }
