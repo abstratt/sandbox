@@ -1,5 +1,8 @@
 ### N-Squares
 
+[![Build Status on Travis CI](https://travis-ci.org/abstratt/sandbox.svg?branch=n-queens)](https://travis-ci.org/abstratt/sandbox)
+
+
 This project attempts to solve the [N-Queens puzzle](https://en.wikipedia.org/wiki/Eight_queens_puzzle), in conjunction with the [No-three-in-line problem](https://en.wikipedia.org/wiki/No-three-in-line_problem).
 
 #### The code
