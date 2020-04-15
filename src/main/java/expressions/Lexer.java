@@ -1,7 +1,10 @@
 package expressions;
 
+import java.io.StreamTokenizer;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.stream.Collectors;
@@ -10,9 +13,6 @@ public class Lexer {
 	private Token[] tokens;
 	private int index;
 
-	public Lexer(String[] tokens) {
-		this.tokens = Arrays.stream(tokens).map(this::asToken).toArray(Token[]::new);
-	}
 	public Lexer(Token[] tokens) {
 		this.tokens = tokens;
 	}
@@ -32,11 +32,10 @@ public class Lexer {
 	public static Lexer analyze(String toScan) {
 		String noSpaces = toScan.replaceAll(" ", "");
 		StringTokenizer tokenizer = new StringTokenizer(noSpaces, "+-*/()", true);
-		List<Token> tokens = new ArrayList<>();
-		while (tokenizer.hasMoreTokens()) {
-			tokens.add(Token.asToken(tokenizer.nextToken()));
-		}
-		return new Lexer(tokens.toArray(new Token[0]));
+		Token[] tokens = Collections.list(tokenizer).stream()//
+				.map(t -> Token.asToken((String) t))//
+				.toArray(Token[]::new);
+		return new Lexer(tokens);
 	}
 
 	@Override
