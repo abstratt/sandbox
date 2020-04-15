@@ -18,12 +18,13 @@ public class Graph<N> {
 	private Set<N> nodes;
 	private Function<N, Collection<N>> walker;
 	private Map<N, Set<N>> backLinks;
-	
+
 	public Graph(Collection<N> nodes, Function<N, Collection<N>> walker) {
 		this.nodes = new LinkedHashSet<>(nodes);
 		this.walker = walker;
 		this.backLinks = buildBackLinks();
 	}
+
 	private Map<N, Set<N>> buildBackLinks() {
 		Map<N, Set<N>> newBackLinks = new LinkedHashMap<>();
 		for (N source : nodes) {
@@ -36,23 +37,27 @@ public class Graph<N> {
 		}
 		return newBackLinks;
 	}
-	
+
 	public Set<N> getImmediatePredecessors(N target) {
 		return Optional.ofNullable(backLinks.get(target)).orElseGet(Collections::emptySet);
 	}
+
 	public Set<N> getAllPredecessors(N node) {
 		return navigate(node, new LinkedHashSet<>(), this::getImmediatePredecessors);
 	}
+
 	public Set<N> getImmediateSuccessors(N node) {
 		return new LinkedHashSet<>(doGetSuccessors(node));
 	}
+
 	private Collection<N> doGetSuccessors(N node) {
 		return walker.apply(node);
 	}
+
 	public Set<N> getAllSuccessors(N node) {
 		return navigate(node, new LinkedHashSet<>(), this::getImmediateSuccessors);
 	}
-	
+
 	private Set<N> navigate(N node, Set<N> collected, Function<N, Collection<N>> walker) {
 		Collection<N> immediate = walker.apply(node);
 		collected.addAll(immediate);
@@ -61,49 +66,49 @@ public class Graph<N> {
 		}
 		return collected;
 	}
-	
+
 	public List<N> sortedNodes() {
 		return sort(nodes, walker);
 	}
-	
-    public static <N> List<N> sort(Collection<N> toSort, Function<N, Collection<N>> nodeWalker) {
-        class Counter {
-            int count = 0;
 
-            @Override
-            public String toString() {
-                return "" + count;
-            }
-        }
-    	
-        if (toSort.size() < 2)
-            return new ArrayList<N>(toSort);
-        Map<N, Counter> predecessorCounts = new HashMap<N, Counter>(toSort.size());
-        for (N vertex : toSort)
-            predecessorCounts.put(vertex, new Counter());
-        for (N vertex : toSort) {
-            Collection<N> successors = nodeWalker.apply(vertex);
-            for (N successor : successors) {
-                Counter predecessorCount = predecessorCounts.get(successor);
-                if (predecessorCount != null)
-                    predecessorCount.count++;
-            }
-        }
-        List<N> sorted = new ArrayList<N>(toSort.size());
-        for (int i = 0; i < toSort.size(); i++)
-            for (Map.Entry<N, Counter> it : predecessorCounts.entrySet())
-                if (it.getValue().count == 0) {
-                    it.getValue().count = -1;
-                    sorted.add(it.getKey());
-                    if (sorted.size() == toSort.size())
-                        return sorted;
-                    for (N successor : nodeWalker.apply(it.getKey())) {
-                        Counter predecessorCount = predecessorCounts.get(successor);
-                        if (predecessorCount != null)
-                            predecessorCount.count--;
-                    }
-                }
-        throw new IllegalArgumentException("Cycle found");
-    }
-	
+	public static <N> List<N> sort(Collection<N> toSort, Function<N, Collection<N>> nodeWalker) {
+		class Counter {
+			int count = 0;
+
+			@Override
+			public String toString() {
+				return "" + count;
+			}
+		}
+
+		if (toSort.size() < 2)
+			return new ArrayList<N>(toSort);
+		Map<N, Counter> predecessorCounts = new HashMap<N, Counter>(toSort.size());
+		for (N vertex : toSort)
+			predecessorCounts.put(vertex, new Counter());
+		for (N vertex : toSort) {
+			Collection<N> successors = nodeWalker.apply(vertex);
+			for (N successor : successors) {
+				Counter predecessorCount = predecessorCounts.get(successor);
+				if (predecessorCount != null)
+					predecessorCount.count++;
+			}
+		}
+		List<N> sorted = new ArrayList<N>(toSort.size());
+		for (int i = 0; i < toSort.size(); i++)
+			for (Map.Entry<N, Counter> it : predecessorCounts.entrySet())
+				if (it.getValue().count == 0) {
+					it.getValue().count = -1;
+					sorted.add(it.getKey());
+					if (sorted.size() == toSort.size())
+						return sorted;
+					for (N successor : nodeWalker.apply(it.getKey())) {
+						Counter predecessorCount = predecessorCounts.get(successor);
+						if (predecessorCount != null)
+							predecessorCount.count--;
+					}
+				}
+		throw new IllegalArgumentException("Cycle found");
+	}
+
 }
