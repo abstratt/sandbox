@@ -30,15 +30,13 @@ public class Lexer {
 	}
 
 	public static Lexer analyze(String toScan) {
-		StringTokenizer tokenizer = new StringTokenizer(toScan, "+-*/ )(", true);
-		List<String> tokens = new ArrayList<>();
+		String noSpaces = toScan.replaceAll(" ", "");
+		StringTokenizer tokenizer = new StringTokenizer(noSpaces, "+-*/()", true);
+		List<Token> tokens = new ArrayList<>();
 		while (tokenizer.hasMoreTokens()) {
-			String nextToken = tokenizer.nextToken();
-			if (!" ".equals(nextToken)) {
-				tokens.add(nextToken);
-			}
+			tokens.add(Token.asToken(tokenizer.nextToken()));
 		}
-		return new Lexer(tokens.stream().map(Token::asToken).toArray(Token[]::new));
+		return new Lexer(tokens.toArray(new Token[0]));
 	}
 
 	@Override
