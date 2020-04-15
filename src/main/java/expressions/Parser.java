@@ -23,12 +23,12 @@ public class Parser {
 		Expression expression = null;
 		loop: for (Token token = tokens.getNext(); token != null; token = tokens.getNext()) {
 			System.out.println(prefix + token + " || " + tokens);
-			switch (token.type) {
+			switch (token.getType()) {
 			case Number:
-				expression = new Operand(token.text);
+				expression = new Operand(token.getText());
 				break;
 			case MultOrDiv:
-				expression = new Factor(token.text, expression, parseExpression(tokens, level + 1, false, false));
+				expression = new Factor(token.getText(), expression, parseExpression(tokens, level + 1, false, false));
 				break;
 			case Minus:
 				expression = expression == null ? parseExpression(tokens, level + 1, eager, false).negative()
