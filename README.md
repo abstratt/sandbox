@@ -1,3 +1,3 @@
 # sandbox
 
-Various unrelated snippets and small projects (see [branches](///abstratt/sandbox/branches)).
+Various unrelated snippets and small projects (see [branches](///github.com/abstratt/sandbox/branches)).
