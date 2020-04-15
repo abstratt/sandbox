@@ -1,24 +1,17 @@
 package expressions;
 
-import java.io.StreamTokenizer;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Enumeration;
-import java.util.List;
 import java.util.StringTokenizer;
 import java.util.stream.Collectors;
 
 public class Lexer {
-	private Token[] tokens;
+	private final Token[] tokens;
+
 	private int index;
 
 	public Lexer(Token[] tokens) {
 		this.tokens = tokens;
-	}
-
-	private Token asToken(String asText) {
-		return Token.asToken(asText);
 	}
 
 	public Token getNext() {
@@ -30,9 +23,9 @@ public class Lexer {
 	}
 
 	public static Lexer analyze(String toScan) {
-		String noSpaces = toScan.replaceAll(" ", "");
-		StringTokenizer tokenizer = new StringTokenizer(noSpaces, "+-*/()", true);
+		StringTokenizer tokenizer = new StringTokenizer(toScan, "+-*/() ", true);
 		Token[] tokens = Collections.list(tokenizer).stream()//
+				.filter(s -> !" ".equals(s))
 				.map(t -> Token.asToken((String) t))//
 				.toArray(Token[]::new);
 		return new Lexer(tokens);
@@ -44,6 +37,8 @@ public class Lexer {
 	}
 
 	public void unget() {
-		index--;
+		if (index > 0) {
+			index--;
+		}
 	}
 }
