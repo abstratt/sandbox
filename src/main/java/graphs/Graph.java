@@ -12,8 +12,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 
-import org.w3c.dom.css.Counter;
-
 public class Graph<N> {
 	private Set<N> nodes;
 	private Function<N, Collection<N>> walker;
