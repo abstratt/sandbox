@@ -1,11 +1,11 @@
 package expressions;
 
-public abstract class Operation extends Expression {
-	protected Expression op1;
-	protected Expression op2;
-	protected String operator;
+public abstract class BinaryOp extends Expression {
+	protected final Expression op1;
+	protected final Expression op2;
+	protected final String operator;
 
-	public Operation(String operator, Expression op1, Expression op2) {
+	public BinaryOp(String operator, Expression op1, Expression op2) {
 		this.op1 = op1;
 		this.op2 = op2;
 		this.operator = operator;

@@ -1,6 +1,6 @@
 package expressions;
 
-public class Factor extends Operation {
+public class Factor extends BinaryOp {
 
 	public Factor(String operator, Expression op1, Expression op2) {
 		super(operator, op1, op2);

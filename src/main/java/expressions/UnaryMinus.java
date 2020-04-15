@@ -1,10 +1,10 @@
 package expressions;
 
-public class NegativeExpression extends Expression {
+public class UnaryMinus extends Expression {
 
-	private Expression childExpression;
+	private final Expression childExpression;
 
-	public NegativeExpression(Expression expression) {
+	public UnaryMinus(Expression expression) {
 		childExpression = expression;
 	}
 

@@ -1,7 +1,7 @@
 package expressions;
 
 public class Operand extends Expression {
-	private int value;
+	private final int value;
 
 	public Operand(String asString) {
 		value = Integer.parseInt(asString);

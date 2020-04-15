@@ -1,8 +1,8 @@
 package expressions;
 
-public class SumTerm extends Operation {
+public class Term extends BinaryOp {
 
-	public SumTerm(Expression op1, Expression op2) {
+	public Term(Expression op1, Expression op2) {
 		super("+", op1, op2);
 	}
 
@@ -15,6 +15,6 @@ public class SumTerm extends Operation {
 
 	@Override
 	public Expression negative() {
-		return new SumTerm(op1.negative(), op2);
+		return new Term(op1.negative(), op2);
 	}
 }

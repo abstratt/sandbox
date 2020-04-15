@@ -19,6 +19,6 @@ public class SubExpression extends Expression {
 	}
 
 	public Expression negative() {
-		return new NegativeExpression(this);
+		return new UnaryMinus(this);
 	}
 }

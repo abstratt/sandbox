@@ -32,10 +32,10 @@ public class Parser {
 				break;
 			case Minus:
 				expression = expression == null ? parseExpression(tokens, level + 1, eager, false).negative()
-						: new SumTerm(expression, parseExpression(tokens, level + 1, true, false).negative());
+						: new Term(expression, parseExpression(tokens, level + 1, true, false).negative());
 				break;
 			case Plus:
-				expression = new SumTerm(expression, parseExpression(tokens, level + 1, true, false));
+				expression = new Term(expression, parseExpression(tokens, level + 1, true, false));
 				break;
 			case OpenBrace:
 				// sub-expression
