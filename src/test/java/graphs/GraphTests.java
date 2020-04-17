@@ -7,6 +7,7 @@ import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.AbstractMap.SimpleEntry;
 import java.util.Arrays;
@@ -18,6 +19,8 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
+
+import graphs.Graph.CycleDetectedException;
 
 public class GraphTests {
 	@Test
@@ -55,6 +58,18 @@ public class GraphTests {
 	}
 
 	@Test
+	public void allSuccessorsWithCycles() {
+		Graph<String> graph = graph(Arrays.asList("A:B", "B:C", "C:A"));
+		try {
+            graph.getAllSuccessors("A");
+            fail("should have failed");
+        } catch (CycleDetectedException e) {
+            // success
+        }
+	}
+
+
+    @Test
 	public void sort() {
 		Graph<String> graph = graph(Arrays.asList("A:B", "A:C", "C:D", "F:D", "E:G"));
 		List<String> sortedNodes = graph.sortedNodes();

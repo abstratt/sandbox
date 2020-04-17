@@ -10,13 +10,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.Function;
+
 
 public class Graph<N> {
 
     public interface Walker<N> {
         Collection<N> next(N node);
     }
+
+    public static class CycleDetectedException extends RuntimeException {
+        private static final long serialVersionUID = 1L;
+    } 
 
 	private Set<N> nodes;
 	private Walker<N> walker;
@@ -62,9 +66,12 @@ public class Graph<N> {
 	}
 
 	private Set<N> navigate(N node, Set<N> collected, Walker<N> walker) {
-		Collection<N> immediate = walker.next(node);
-		collected.addAll(immediate);
+        Collection<N> immediate = walker.next(node);
 		for (N n : immediate) {
+            if (collected.contains(n)) {
+                throw new CycleDetectedException();
+            }            
+            collected.add(n);
 			navigate(n, collected, walker);
 		}
 		return collected;
@@ -111,7 +118,7 @@ public class Graph<N> {
 							predecessorCount.count--;
 					}
 				}
-		throw new IllegalArgumentException("Cycle found");
+		throw new CycleDetectedException();
 	}
 
 }
