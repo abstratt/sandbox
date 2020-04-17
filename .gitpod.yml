@@ -1,2 +1,3 @@
 tasks:
-  - init: mvn install -DskipTests=true
+  - init: yes | sdk install java 8.0.242.hs-adpt
+    init: mvn test
