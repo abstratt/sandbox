@@ -37,7 +37,7 @@ class LocalTimeConverter : AttributeConverter<LocalTime, Time> {
 @MappedSuperclass
 abstract class BaseEntity (
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     open var id: Long? = null
 )
 
