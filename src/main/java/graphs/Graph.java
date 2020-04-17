@@ -13,11 +13,16 @@ import java.util.Set;
 import java.util.function.Function;
 
 public class Graph<N> {
+
+    public interface Walker<N> {
+        Collection<N> next(N node);
+    }
+
 	private Set<N> nodes;
-	private Function<N, Collection<N>> walker;
+	private Walker<N> walker;
 	private Map<N, Set<N>> backLinks;
 
-	public Graph(Collection<N> nodes, Function<N, Collection<N>> walker) {
+	public Graph(Collection<N> nodes, Walker<N> walker) {
 		this.nodes = new LinkedHashSet<>(nodes);
 		this.walker = walker;
 		this.backLinks = buildBackLinks();
@@ -49,15 +54,15 @@ public class Graph<N> {
 	}
 
 	private Collection<N> doGetSuccessors(N node) {
-		return walker.apply(node);
+		return walker.next(node);
 	}
 
 	public Set<N> getAllSuccessors(N node) {
 		return navigate(node, new LinkedHashSet<>(), this::getImmediateSuccessors);
 	}
 
-	private Set<N> navigate(N node, Set<N> collected, Function<N, Collection<N>> walker) {
-		Collection<N> immediate = walker.apply(node);
+	private Set<N> navigate(N node, Set<N> collected, Walker<N> walker) {
+		Collection<N> immediate = walker.next(node);
 		collected.addAll(immediate);
 		for (N n : immediate) {
 			navigate(n, collected, walker);
@@ -69,7 +74,7 @@ public class Graph<N> {
 		return sort(nodes, walker);
 	}
 
-	public static <N> List<N> sort(Collection<N> toSort, Function<N, Collection<N>> nodeWalker) {
+	public static <N> List<N> sort(Collection<N> toSort, Walker<N> nodeWalker) {
 		class Counter {
 			int count = 0;
 
@@ -85,7 +90,7 @@ public class Graph<N> {
 		for (N vertex : toSort)
 			predecessorCounts.put(vertex, new Counter());
 		for (N vertex : toSort) {
-			Collection<N> successors = nodeWalker.apply(vertex);
+			Collection<N> successors = nodeWalker.next(vertex);
 			for (N successor : successors) {
 				Counter predecessorCount = predecessorCounts.get(successor);
 				if (predecessorCount != null)
@@ -100,7 +105,7 @@ public class Graph<N> {
 					sorted.add(it.getKey());
 					if (sorted.size() == toSort.size())
 						return sorted;
-					for (N successor : nodeWalker.apply(it.getKey())) {
+					for (N successor : nodeWalker.next(it.getKey())) {
 						Counter predecessorCount = predecessorCounts.get(successor);
 						if (predecessorCount != null)
 							predecessorCount.count--;
