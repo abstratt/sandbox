@@ -24,9 +24,9 @@ Write unit tests.
 
 The application was built using Spring Boot, Kotlin, Flyway, and Swagger.
 
-The application needs Postgresql 9.x. It is configured to rely on the following:
+The application needs Postgresql 9.x to run (but not for running the tests). It is configured to rely on the following:
 - one database user: caloriesdb
-- two databases: caloriesdb and caloriestestdb, both owned by that user
+- one database: caloriesdb, owned by that user
 
 In order to build and run tests, you will need to use maven.
 
