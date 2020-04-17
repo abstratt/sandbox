@@ -1,3 +1,2 @@
 tasks:
-  - init: yes | sdk install java 8.0.242.hs-adpt
-    init: mvn test
+  - init: sdk uninstall java `(sdk current java | rev | cut -f 1 -d " " | rev)` && yes | sdk install java 8.0.242.hs-adpt && mvn test
