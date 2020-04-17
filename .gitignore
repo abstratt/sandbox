@@ -1,0 +1,9 @@
+build/
+out/
+abstratt-calories.*
+.project
+.classpath
+.gradle/
+.idea/
+.settings/
+/target/

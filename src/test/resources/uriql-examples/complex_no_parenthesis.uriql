@@ -1,0 +1,1 @@
+ date eq '2016-05-01' AND number_of_calories gt 20 OR date eq '2018-10-10'
