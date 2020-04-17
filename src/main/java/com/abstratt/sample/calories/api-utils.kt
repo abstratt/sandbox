@@ -206,7 +206,7 @@ class ClientHttpResponseWrapper : AbstractClientHttpResponse {
     }
 
     @Throws(IOException::class)
-    override fun getStatusText(): String {
+    override fun getStatusText(): String? {
         return originalResponse.statusText
     }
 
