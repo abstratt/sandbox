@@ -81,40 +81,31 @@ public class Graph<N> {
     }
 
     public static <N> List<N> sort(Collection<N> toSort, Walker<N> nodeWalker) {
-        class Counter {
-            int count = 0;
-
-            @Override
-            public String toString() {
-                return "" + count;
-            }
-        }
-
         if (toSort.size() < 2)
             return new ArrayList<N>(toSort);
-        Map<N, Counter> predecessorCounts = new HashMap<N, Counter>(toSort.size());
+        Map<N, int[]> predecessorCounts = new HashMap<N, int[]>(toSort.size());
         for (N vertex : toSort)
-            predecessorCounts.put(vertex, new Counter());
+            predecessorCounts.put(vertex, new int[1]);
         for (N vertex : toSort) {
             Collection<N> successors = nodeWalker.next(vertex);
             for (N successor : successors) {
-                Counter predecessorCount = predecessorCounts.get(successor);
+                int[] predecessorCount = predecessorCounts.get(successor);
                 if (predecessorCount != null)
-                    predecessorCount.count++;
+                    predecessorCount[0]++;
             }
         }
         List<N> sorted = new ArrayList<N>(toSort.size());
         for (int i = 0; i < toSort.size(); i++)
-            for (Map.Entry<N, Counter> it : predecessorCounts.entrySet())
-                if (it.getValue().count == 0) {
-                    it.getValue().count = -1;
+            for (Map.Entry<N, int[]> it : predecessorCounts.entrySet())
+                if (it.getValue()[0] == 0) {
+                    it.getValue()[0] = -1;
                     sorted.add(it.getKey());
                     if (sorted.size() == toSort.size())
                         return sorted;
                     for (N successor : nodeWalker.next(it.getKey())) {
-                        Counter predecessorCount = predecessorCounts.get(successor);
+                        int[] predecessorCount = predecessorCounts.get(successor);
                         if (predecessorCount != null)
-                            predecessorCount.count--;
+                            predecessorCount[0]--;
                     }
                 }
         throw new CycleDetectedException();
