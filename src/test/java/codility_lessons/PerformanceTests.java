@@ -62,7 +62,7 @@ public class PerformanceTests extends Helpers {
         for (int i = 0; i < operations.length; i++) {
             operations[i] = i % 2 == 0 ? i % counterCount + 1 : (counterCount + 1);
         }
-        measure(() -> maxCounters(counterCount, operations), 7000);
+        measure(() -> maxCounters(counterCount, operations), 10000);
     }
 
     <T> T measure(Supplier<T> r, long thresholdInMillis) {
