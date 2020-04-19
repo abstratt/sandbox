@@ -1,9 +1,9 @@
-package codility_extra;
+package codility_lessons;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import codility_lessons.Helpers;
+import codility_extra.*;
 
 public class ExtraTests extends Helpers {
     @Test

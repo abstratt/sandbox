@@ -3,7 +3,7 @@ package codility_lessons;
 import java.util.Arrays;
 import java.util.Random;
 
-public class Helpers {
+class Helpers {
     public int buildStoneWall(int... heights) {
         return new StoneWall().solve(heights);
     }
