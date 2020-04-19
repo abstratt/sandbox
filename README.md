@@ -15,3 +15,4 @@ code to learn Java, these may be helpful. If you have any questions, just open a
 - [top-phrases](https://github.com/abstratt/sandbox/tree/top-phrases) - a simple tool for find most frequent strings occurring in arbitrarily large files
 - [got-wifi](https://github.com/abstratt/sandbox/tree/got-wifi) - a simple backend with a REST API for finding wifi spots (incomplete)
 - [calories](https://github.com/abstratt/sandbox/tree/calories) - a simple backend with a REST API for recording calories
+- [various](https://github.com/abstratt/sandbox/tree/various) - various unrelated challenges
