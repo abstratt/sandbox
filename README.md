@@ -5,8 +5,8 @@ Various unrelated snippets and small projects (see [branches](///github.com/abst
 ### Development challenges
 
 Some of the projects here were created in the course of development challenges. 
-If you want to see how I tackled them, or are looking for some simple examples of functional
-code to learn Java, these may be helpful. If you have any questions, just open an issue. 
+If you want to see how I tackled them, or are looking for some simple examples of functioning
+code to learn Java or Kotlin, these may be helpful. If you have any questions, just open an issue. 
 
 - [n-queens](https://github.com/abstratt/sandbox/tree/n-queens) - the classic n-queens problem with a twist
 - [graphs](https://github.com/abstratt/sandbox/tree/graphs) - graph walking
