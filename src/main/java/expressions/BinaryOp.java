@@ -3,8 +3,6 @@ package expressions;
 import java.util.List;
 import java.util.function.Function;
 
-import expressions.Expression.AbstractExpression;
-
 public abstract class BinaryOp extends AbstractExpression {
 	public enum OperatorKind {
 		Plus("+"), Minus("-"), Multiplication("*"), Division("/");

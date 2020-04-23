@@ -2,8 +2,6 @@ package expressions;
 
 import java.util.List;
 
-import expressions.Expression.AbstractExpression;
-
 public class UnaryMinus extends AbstractExpression {
 
 	private final Expression childExpression;
