@@ -76,7 +76,8 @@ class Tests {
 	@Test
 	void bytecodeExecutionWithIntResult() {
 		Emitter emitter = new Emitter();
-		evaluationAsInt(source -> (Integer) Instruction.evaluate(emitter.emit(source)));
+		Machine machine = new Machine();
+		evaluationAsInt(source -> (Integer) machine.execute(emitter.emit(source)));
 	}
 	
 	@Test
@@ -88,7 +89,8 @@ class Tests {
 	@Test
 	void bytecodeExecutionWithDecimalResult() {
 		Emitter emitter = new Emitter();
-		evaluationAsDecimal(source -> (Double) Instruction.evaluate(emitter.emit(source)));
+		Machine machine = new Machine();
+		evaluationAsDecimal(source -> (Double) machine.execute(emitter.emit(source)));
 	}
 	
 	void evaluationAsInt(Function<String, Integer> evaluator) {

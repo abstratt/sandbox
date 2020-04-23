@@ -1,30 +1,22 @@
 package expressions;
 
-import java.util.List;
 import java.util.Stack;
 
 public interface Instruction {
 	public class DecimalToInt extends AbstractInstruction {
 
 		@Override
-		public void evaluate(Stack<Object> stack) {
+		public void execute(Stack<Object> stack) {
 			Double value1 = (Double) stack.pop();
 			stack.push(value1.intValue());
 		}
 	}
 
-	void evaluate(Stack<Object> stack);
+	void execute(Stack<Object> stack);
 	
-	static Object evaluate(List<Instruction> instructions) {
-		Stack<Object> stack = new Stack<Object>();
-		instructions.forEach(i -> i.evaluate(stack));
-		assert stack.size() == 1;
-		return stack.pop();
-	}
-
 	public static class NegInt extends AbstractInstruction {
 		@Override
-		public void evaluate(Stack<Object> stack) {
+		public void execute(Stack<Object> stack) {
 			Integer value = (Integer) stack.pop();
 			stack.push(-value);
 		}
@@ -32,7 +24,7 @@ public interface Instruction {
 	
 	public static class NegDecimal extends AbstractInstruction {
 		@Override
-		public void evaluate(Stack<Object> stack) {
+		public void execute(Stack<Object> stack) {
 			Double value = (Double) stack.pop();
 			stack.push(-value);
 		}
@@ -41,7 +33,7 @@ public interface Instruction {
 	
 	public static class AddDecimal extends AbstractInstruction {
 		@Override
-		public void evaluate(Stack<Object> stack) {
+		public void execute(Stack<Object> stack) {
 			Double value1 = (Double) stack.pop();
 			Double value2 = (Double) stack.pop();
 			stack.push(value1 + value2);
@@ -50,7 +42,7 @@ public interface Instruction {
 
 	public static class AddInt extends AbstractInstruction {
 		@Override
-		public void evaluate(Stack<Object> stack) {
+		public void execute(Stack<Object> stack) {
 			Integer value1 = (Integer) stack.pop();
 			Integer value2 = (Integer) stack.pop();
 			stack.push(value1 + value2);
@@ -59,7 +51,7 @@ public interface Instruction {
 
 	public static class IntToDecimal extends AbstractInstruction {
 		@Override
-		public void evaluate(Stack<Object> stack) {
+		public void execute(Stack<Object> stack) {
 			Integer value1 = (Integer) stack.pop();
 			stack.push(value1.doubleValue());
 		}
@@ -67,7 +59,7 @@ public interface Instruction {
 
 	public static class MultDecimal extends AbstractInstruction {
 		@Override
-		public void evaluate(Stack<Object> stack) {
+		public void execute(Stack<Object> stack) {
 			Double value1 = (Double) stack.pop();
 			Double value2 = (Double) stack.pop();
 			stack.push(value1 * value2);
@@ -76,7 +68,7 @@ public interface Instruction {
 	
 	public static class DivDecimal extends AbstractInstruction {
 		@Override
-		public void evaluate(Stack<Object> stack) {
+		public void execute(Stack<Object> stack) {
 			Double value1 = (Double) stack.pop();
 			Double value2 = (Double) stack.pop();
 			stack.push(value1 / value2);
@@ -85,7 +77,7 @@ public interface Instruction {
 	
 	public static class DivInt extends AbstractInstruction {
 		@Override
-		public void evaluate(Stack<Object> stack) {
+		public void execute(Stack<Object> stack) {
 			Integer value1 = (Integer) stack.pop();
 			Integer value2 = (Integer) stack.pop();
 			stack.push(value1 / value2);
@@ -95,7 +87,7 @@ public interface Instruction {
 	
 	public static class MultInt extends AbstractInstruction {
 		@Override
-		public void evaluate(Stack<Object> stack) {
+		public void execute(Stack<Object> stack) {
 			Integer value1 = (Integer) stack.pop();
 			Integer value2 = (Integer) stack.pop();
 			stack.push(value1 * value2);
@@ -124,7 +116,7 @@ public interface Instruction {
 		}
 
 		@Override
-		public void evaluate(Stack<Object> stack) {
+		public void execute(Stack<Object> stack) {
 			stack.push(value);
 		}
 		
