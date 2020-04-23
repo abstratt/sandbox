@@ -2,7 +2,7 @@ package expressions;
 
 import java.util.List;
 
-import expressions.Values.DecimalValue;
+import expressions.Value.DecimalValue;
 
 public class DecimalLiteral extends Operand<Double> {
 	public DecimalLiteral(Double value) {

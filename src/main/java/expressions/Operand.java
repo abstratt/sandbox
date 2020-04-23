@@ -1,7 +1,5 @@
 package expressions;
 
-import expressions.Values.Value;
-
 public abstract class Operand<T extends Number> extends Expression {
 	protected final T value;
 	private Type type;

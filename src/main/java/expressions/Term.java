@@ -2,8 +2,6 @@ package expressions;
 
 import java.util.function.Function;
 
-import expressions.Values.Value;
-
 public class Term extends BinaryOp {
 
 	public Term(Expression op1, Expression op2) {

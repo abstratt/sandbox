@@ -2,7 +2,7 @@ package expressions;
 
 import java.util.List;
 
-import expressions.Values.IntValue;
+import expressions.Value.IntValue;
 
 public class IntegerLiteral extends Operand<Integer> {
 

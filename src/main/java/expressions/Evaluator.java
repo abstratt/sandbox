@@ -1,8 +1,7 @@
 package expressions;
 
-import expressions.Values.DecimalValue;
-import expressions.Values.IntValue;
-import expressions.Values.Value;
+import expressions.Value.DecimalValue;
+import expressions.Value.IntValue;
 
 public class Evaluator {
 

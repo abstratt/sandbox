@@ -3,8 +3,6 @@ package expressions;
 import java.util.ArrayList;
 import java.util.List;
 
-import expressions.Values.Value;
-
 public abstract class Expression {
 	abstract <T extends Number> Value<?> doEvaluate();
 	

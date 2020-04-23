@@ -1,8 +1,6 @@
 package expressions;
-
+		
 import java.util.function.Function;
-
-import expressions.Values.Value;
 
 public class Factor extends BinaryOp {
 

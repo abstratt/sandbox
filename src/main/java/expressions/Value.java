@@ -1,15 +1,39 @@
 package expressions;
 
-public interface Values {
-	abstract class Value<T extends Number> {
+public interface Value<T> {
+	
+
+	T getValue();
+
+	Type getType();
+
+	Value<?> castTo(Type targetType);
+
+	Value<T> newValue(T value);
+
+	Value<T> multiply(Value<T> another);
+
+	Value<T> divide(Value<T> another);
+
+	Value<T> subtract(Value<T> another);
+
+	Value<T> add(Value<T> another);
+	
+	Value<T> minus();
+	
+	DecimalValue asDecimal();
+
+	
+	abstract class AbstractValue<T extends Number> implements Value<T> {
 		private final T value;
 		private final Type type;
 
-		public Value(T value, Type type) {
+		public AbstractValue(T value, Type type) {
 			this.value = value;
 			this.type = type;
 		}
 
+		@Override
 		public Type getType() {
 			return type;
 		}
@@ -19,32 +43,20 @@ public interface Values {
 			return getValue().toString();
 		}
 
+		@Override
 		public T getValue() {
 			return value;
 		}
 
-		public abstract Value<T> newValue(T value);
-
-		public abstract Value<T> multiply(Value<T> another);
-
-		public abstract Value<T> divide(Value<T> another);
-
-		public abstract Value<T> subtract(Value<T> another);
-
-		public abstract Value<T> add(Value<T> another);
-		
-		public abstract Value<T> minus();
-		
-		public abstract DecimalValue asDecimal();
-
-		protected Value<?> castTo(Type targetType) {
+		@Override
+		public Value<?> castTo(Type targetType) {
 			assert (targetType == type) : "Cannot cast " + type + " to " + targetType;
 			return this;
 		}
 
 	}
 
-	class IntValue extends Value<Integer> {
+	class IntValue extends AbstractValue<Integer> {
 
 		public IntValue(Integer value) {
 			super(value, Type.Int);
@@ -86,12 +98,12 @@ public interface Values {
 		}
 		
 		@Override
-		protected Value<?> castTo(Type targetType) {
+		public Value<?> castTo(Type targetType) {
 			return targetType == Type.Decimal ? asDecimal() : this;
 		}
 	}
 
-	class DecimalValue extends Value<Double> {
+	class DecimalValue extends AbstractValue<Double> {
 
 		public DecimalValue(Double value) {
 			super(value, Type.Decimal);
@@ -133,5 +145,4 @@ public interface Values {
 		}
 		
 	}
-
 }
