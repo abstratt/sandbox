@@ -1,6 +1,6 @@
 package expressions;
 
-import java.util.function.BiFunction;
+import java.util.function.Function;
 
 import expressions.Values.Value;
 
@@ -11,12 +11,12 @@ public class Term extends BinaryOp {
 	}
 
 	@Override
-	BiFunction<Value<?>, Value<?>, Value<?>> getOperatorFunction(OperatorKind operator) {
-		switch (operator) {
-		case Plus: return Value::add;
-		case Minus: return Value::subtract;
+	<T extends Number> Function<Value<T>, Value<T>> getOperatorFunction(Value<T> v1, OperatorKind operator) {
+		switch(operator) {
+		case Plus: return v1::add;
+		case Minus : return v1::subtract;
+		default: throw new IllegalStateException("Unexpected operator: " + operator);
 		}
-		throw new IllegalStateException("Unexpected operator: " + operator);
 	}
 
 	@Override

@@ -2,6 +2,7 @@ package expressions;
 
 import java.util.List;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 
 import expressions.Values.Value;
 
@@ -35,15 +36,15 @@ public abstract class BinaryOp extends Expression {
 		this.operator = operator;
 	}
 	
-	abstract BiFunction<Value<?>, Value<?>, Value<?>> getOperatorFunction(OperatorKind operator);
+	abstract <T extends Number> Function<Value<T>, Value<T>> getOperatorFunction(Value<T> v1, OperatorKind operator);
 	
 	@Override
-	public Value<?> doEvaluate() {
+	public <T extends Number> Value<T> doEvaluate() {
 		Type targetType = getType();
-		Value<?> result1 = op1.evaluate().castTo(targetType);
-		Value<?> result2 = op2.evaluate().castTo(targetType);
-		BiFunction<Value<?>, Value<?>, Value<?>> operatorFunction = getOperatorFunction(operator);
-		return operatorFunction.apply(result1, result2);
+		Value<T> result1 = (Value<T>) op1.evaluate().castTo(targetType);
+		Value<T> result2 = (Value<T>) op2.evaluate().castTo(targetType);
+		Function<Value<T>, Value<T>> operatorFunction = getOperatorFunction(result1, operator);
+		return operatorFunction.apply(result2);
 	}
 
 

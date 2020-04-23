@@ -1,6 +1,6 @@
 package expressions;
 
-import java.util.function.BiFunction;
+import java.util.function.Function;
 
 import expressions.Values.Value;
 
@@ -15,10 +15,10 @@ public class Factor extends BinaryOp {
 	}
 	
 	@Override
-	BiFunction<Value<?>, Value<?>, Value<?>> getOperatorFunction(OperatorKind operator) {
+	<T extends Number> Function<Value<T>, Value<T>> getOperatorFunction(Value<T> v1, OperatorKind operator) {
 		switch(operator) {
-		case Multiplication: return Value::multiply;
-		case Division : return Value::divide;
+		case Multiplication: return v1::multiply;
+		case Division : return v1::divide;
 		default: throw new IllegalStateException("Unexpected operator: " + operator);
 		}
 	}
