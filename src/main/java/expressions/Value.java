@@ -1,7 +1,6 @@
 package expressions;
 
 public interface Value<T> {
-	
 
 	T getValue();
 
@@ -22,7 +21,6 @@ public interface Value<T> {
 	Value<T> minus();
 	
 	DecimalValue asDecimal();
-
 	
 	abstract class AbstractValue<T extends Number> implements Value<T> {
 		private final T value;

@@ -3,7 +3,9 @@ package expressions;
 import java.util.List;
 import java.util.function.Function;
 
-public abstract class BinaryOp extends Expression {
+import expressions.Expression.AbstractExpression;
+
+public abstract class BinaryOp extends AbstractExpression {
 	public enum OperatorKind {
 		Plus("+"), Minus("-"), Multiplication("*"), Division("/");
 		
@@ -51,12 +53,12 @@ public abstract class BinaryOp extends Expression {
 	}
 	
 	@Override
-	Type getType() {
+	public Type getType() {
 		return op2.getType() == Type.Decimal ? Type.Decimal : op1.getType();
 	}
 
 	@Override
-	protected List<Instruction> emit(List<Instruction> collected) {
+	public List<Instruction> emit(List<Instruction> collected) {
 		Type targetType = getType();
 		emitSubExpression(op1, collected, targetType);
 		emitSubExpression(op2, collected, targetType);

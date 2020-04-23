@@ -2,7 +2,9 @@ package expressions;
 
 import java.util.List;
 
-public class SubExpression extends Expression {
+import expressions.Expression.AbstractExpression;
+
+public class SubExpression extends AbstractExpression {
 	private final Expression childExpression;
 
 	public SubExpression(Expression childExpression) {
@@ -10,12 +12,12 @@ public class SubExpression extends Expression {
 	}
 
 	@Override
-	Value doEvaluate() {
+	public Value<?> doEvaluate() {
 		return childExpression.evaluate();
 	}
 	
 	@Override
-	Type getType() {
+	public Type getType() {
 		return childExpression.getType();
 	}
 
@@ -30,7 +32,7 @@ public class SubExpression extends Expression {
 	}
 	
 	@Override
-	protected List<Instruction> emit(List<Instruction> collected) {
+	public List<Instruction> emit(List<Instruction> collected) {
 		return emitSubExpression(childExpression, collected);
 	}
 }

@@ -25,7 +25,7 @@ public class IntegerLiteral extends Operand<Integer> {
 	}
 	
 	@Override
-	protected List<Instruction> emit(List<Instruction> collected) {
+	public List<Instruction> emit(List<Instruction> collected) {
 		return append(collected, new Instruction.PushInt(value));
 	}
 }

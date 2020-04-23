@@ -24,7 +24,7 @@ public class DecimalLiteral extends Operand<Double> {
 	}
 
 	@Override
-	protected List<Instruction> emit(List<Instruction> collected) {
+	public List<Instruction> emit(List<Instruction> collected) {
 		return append(collected, new Instruction.PushDecimal(value));
 	}
 }

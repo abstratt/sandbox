@@ -1,6 +1,8 @@
 package expressions;
 
-public abstract class Operand<T extends Number> extends Expression {
+import expressions.Expression.AbstractExpression;
+
+public abstract class Operand<T extends Number> extends AbstractExpression {
 	protected final T value;
 	private Type type;
 
