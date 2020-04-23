@@ -106,12 +106,15 @@ class Tests {
 		assertEquals(-5, evaluator.apply("-2*3+1"));
 		assertEquals(7, evaluator.apply("-2*-3+1"));
 		assertEquals(10, evaluator.apply("-(-10)"));
+		assertEquals(16, evaluator.apply("1+2*3*4-10+1"));
+		assertEquals(-32, evaluator.apply("1+2*3*-4-10+1"));
 	}
 	
 	void evaluationAsDecimal(Function<String, Double> evaluator) {
 		assertEquals(1.0, evaluator.apply("1.0"));
 		assertEquals(5.0, evaluator.apply("2+3.0"));
 		assertEquals(-5.5, evaluator.apply("-(2.1+3.4)"));
+		assertEquals(-22.9, evaluator.apply("1+2.5*2*-3-10+1.1"));
 	}
 	
 	@Test
