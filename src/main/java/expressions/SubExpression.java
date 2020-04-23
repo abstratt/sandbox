@@ -1,5 +1,9 @@
 package expressions;
 
+import java.util.List;
+
+import expressions.Values.Value;
+
 public class SubExpression extends Expression {
 	private final Expression childExpression;
 
@@ -8,8 +12,13 @@ public class SubExpression extends Expression {
 	}
 
 	@Override
-	int doEvaluate() {
+	Value doEvaluate() {
 		return childExpression.evaluate();
+	}
+	
+	@Override
+	Type getType() {
+		return childExpression.getType();
 	}
 
 	@Override
@@ -20,5 +29,10 @@ public class SubExpression extends Expression {
 
 	public Expression negative() {
 		return new UnaryMinus(this);
+	}
+	
+	@Override
+	protected List<Instruction> emit(List<Instruction> collected) {
+		return emitSubExpression(childExpression, collected);
 	}
 }

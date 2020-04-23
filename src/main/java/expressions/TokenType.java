@@ -1,7 +1,7 @@
 package expressions;
 
 enum TokenType {
-	Number, Plus, Minus, MultOrDiv, OpenBrace, CloseBrace;
+	Int, Decimal, Plus, Minus, MultOrDiv, OpenBrace, CloseBrace;
 
 	static TokenType forText(String asText) {
 		if ("(".equals(asText)) {
@@ -19,6 +19,6 @@ enum TokenType {
 		if ("-".equals(asText)) {
 			return Minus;
 		}
-		return Number;
+		return asText.contains(".") ? Decimal : Int;
 	}
 }

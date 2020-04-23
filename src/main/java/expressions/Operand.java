@@ -1,29 +1,34 @@
 package expressions;
 
-public class Operand extends Expression {
-	private final int value;
+import expressions.Values.Value;
 
-	public Operand(String asString) {
-		value = Integer.parseInt(asString);
+public abstract class Operand<T extends Number> extends Expression {
+	protected final T value;
+	private Type type;
+
+	public Operand(T value, Type type) {
+		this.value = value;
+		this.type = type;
 	}
+	
+	@Override
+	public abstract Value<T> doEvaluate();
 
 	@Override
-	public int doEvaluate() {
-		return value;
-	}
-
-	@Override
-	public int evaluate() {
+	public Value<T> evaluate() {
 		return doEvaluate();
 	}
 
 	@Override
 	public String toString() {
-		return Integer.toString(value);
+		return value.toString();
 	}
-
 	@Override
-	public Expression negative() {
-		return new Operand("-" + value);
+	public final Type getType() {
+		return type;
+	}
+	
+	public T getValue() {
+		return value;
 	}
 }

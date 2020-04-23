@@ -1,5 +1,9 @@
 package expressions;
 
+import java.util.List;
+
+import expressions.Values.Value;
+
 public class UnaryMinus extends Expression {
 
 	private final Expression childExpression;
@@ -9,8 +13,8 @@ public class UnaryMinus extends Expression {
 	}
 
 	@Override
-	int doEvaluate() {
-		return -childExpression.evaluate();
+	Value doEvaluate() {
+		return childExpression.evaluate().minus();
 	}
 
 	@Override
@@ -22,5 +26,15 @@ public class UnaryMinus extends Expression {
 	public Expression negative() {
 		return childExpression;
 	}
+	
+	@Override
+	Type getType() {
+		return childExpression.getType();
+	}
 
+	@Override
+	protected List<Instruction> emit(List<Instruction> collected) {
+		emitSubExpression(childExpression, collected);
+		return append(collected, getType() == Type.Decimal ? new Instruction.NegDecimal() : new Instruction.NegInt());
+	}
 }

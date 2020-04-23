@@ -24,8 +24,11 @@ public class Parser {
 		loop: for (Token token = tokens.getNext(); token != null; token = tokens.getNext()) {
 			System.out.println(prefix + token + " || " + tokens);
 			switch (token.getType()) {
-			case Number:
-				expression = new Operand(token.getText());
+			case Int:
+				expression = new IntegerLiteral(token.getText());
+				break;
+			case Decimal:
+				expression = new DecimalLiteral(token.getText());
 				break;
 			case MultOrDiv:
 				expression = new Factor(token.getText(), expression, parseExpression(tokens, level + 1, false, false));
