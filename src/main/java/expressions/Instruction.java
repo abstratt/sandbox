@@ -1,113 +1,86 @@
 package expressions;
 
 import java.util.Stack;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
 public interface Instruction {
-	public class DecimalToInt extends AbstractInstruction {
-
-		@Override
-		public void execute(Stack<Object> stack) {
-			Double value1 = (Double) stack.pop();
-			stack.push(value1.intValue());
-		}
-	}
-
 	void execute(Stack<Object> stack);
-	
-	public static class NegInt extends AbstractInstruction {
-		@Override
-		public void execute(Stack<Object> stack) {
-			Integer value = (Integer) stack.pop();
-			stack.push(-value);
+
+	class DecimalToInt extends Pop1Instruction<Double> {
+		DecimalToInt() {
+			super(Double::intValue);
 		}
 	}
 	
-	public static class NegDecimal extends AbstractInstruction {
-		@Override
-		public void execute(Stack<Object> stack) {
-			Double value = (Double) stack.pop();
-			stack.push(-value);
+	class NegInt extends Pop1Instruction<Integer> {
+		NegInt() {
+			super(value -> -value);
+		}
+	}
+	
+	class NegDecimal extends Pop1Instruction<Double> {
+		NegDecimal() {
+			super(value -> -value);
+		}
+	}
+	
+	class AddDecimal extends Pop2Instruction<Double, Double> {
+		AddDecimal() {
+			super((value1, value2) -> value1 + value2);
 		}
 	}
 
-	
-	public static class AddDecimal extends AbstractInstruction {
-		@Override
-		public void execute(Stack<Object> stack) {
-			Double value1 = (Double) stack.pop();
-			Double value2 = (Double) stack.pop();
-			stack.push(value1 + value2);
+	class AddInt extends Pop2Instruction<Integer, Integer> {
+		AddInt() {
+			super((value1, value2) -> value1 + value2);
 		}
 	}
 
-	public static class AddInt extends AbstractInstruction {
-		@Override
-		public void execute(Stack<Object> stack) {
-			Integer value1 = (Integer) stack.pop();
-			Integer value2 = (Integer) stack.pop();
-			stack.push(value1 + value2);
+	class IntToDecimal extends Pop1Instruction<Integer> {
+		IntToDecimal() {
+			super(value -> value.doubleValue());
 		}
 	}
 
-	public static class IntToDecimal extends AbstractInstruction {
-		@Override
-		public void execute(Stack<Object> stack) {
-			Integer value1 = (Integer) stack.pop();
-			stack.push(value1.doubleValue());
-		}
-	}
-
-	public static class MultDecimal extends AbstractInstruction {
-		@Override
-		public void execute(Stack<Object> stack) {
-			Double value1 = (Double) stack.pop();
-			Double value2 = (Double) stack.pop();
-			stack.push(value1 * value2);
+	class MultDecimal extends Pop2Instruction<Double, Double> {
+		MultDecimal() {
+			super((value1, value2) -> value1 * value2);
 		}
 	}
 	
-	public static class DivDecimal extends AbstractInstruction {
-		@Override
-		public void execute(Stack<Object> stack) {
-			Double value1 = (Double) stack.pop();
-			Double value2 = (Double) stack.pop();
-			stack.push(value1 / value2);
+	class MultInt extends Pop2Instruction<Integer, Integer> {
+		MultInt() {
+			super((value1, value2) -> value1 * value2);
 		}
 	}
 	
-	public static class DivInt extends AbstractInstruction {
-		@Override
-		public void execute(Stack<Object> stack) {
-			Integer value1 = (Integer) stack.pop();
-			Integer value2 = (Integer) stack.pop();
-			stack.push(value1 / value2);
+	class DivDecimal extends Pop2Instruction<Double, Double> {
+		DivDecimal() {
+			super((value1, value2) -> value1 / value2);
 		}
 	}
 	
-	
-	public static class MultInt extends AbstractInstruction {
-		@Override
-		public void execute(Stack<Object> stack) {
-			Integer value1 = (Integer) stack.pop();
-			Integer value2 = (Integer) stack.pop();
-			stack.push(value1 * value2);
+	class DivInt extends Pop2Instruction<Integer, Integer> {
+		DivInt() {
+			super((value1, value2) -> value1 / value2);
 		}
 	}
 	
-	public static class PushDecimal extends PushValue<Double> {
+	class PushDecimal extends PushValue<Double> {
 		public PushDecimal(Double value) {
 			super(value);
 		}
 	}
 	
-	public static class PushInt extends PushValue<Integer> {
+	class PushInt extends PushValue<Integer> {
 
 		public PushInt(Integer value) {
 			super(value);
 		}
 	}
 	
-	public static abstract class PushValue<T> extends AbstractInstruction {
+	abstract class PushValue<T> extends AbstractInstruction {
 
 		private T value;
 
@@ -135,8 +108,36 @@ public interface Instruction {
 			return super.toString() + "("+value+")";
 		}
 	}
+
+
+	abstract class Pop1Instruction<P1> extends AbstractInstruction {
+		private Function<P1, Object> performer;
+
+		Pop1Instruction(Function<P1, Object> performer) {
+			this.performer = performer;
+		}
+		@Override
+		public void execute(Stack<Object> stack) {
+			P1 value1 = (P1) stack.pop();
+			stack.push(performer.apply(value1));
+		}
+	}
+
+	abstract class Pop2Instruction<P1, P2> extends AbstractInstruction {
+		private BiFunction<P1, P2, Object> performer;
+
+		Pop2Instruction(BiFunction<P1, P2, Object> performer) {
+			this.performer = performer;
+		}
+		@Override
+		public void execute(Stack<Object> stack) {
+			P1 value1 = (P1) stack.pop();
+			P2 value2 = (P2) stack.pop();
+			stack.push(performer.apply(value1, value2));
+		}
+	}
 	
-	static abstract class AbstractInstruction implements Instruction {
+	abstract class AbstractInstruction implements Instruction {
 		@Override
 		public int hashCode() {
 			return getClass().hashCode();
