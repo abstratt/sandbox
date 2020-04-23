@@ -82,9 +82,7 @@ class Tests {
 	@Test
 	void evaluationFP() {
 		Evaluator evaluator = new Evaluator();
-		assertEquals(1.0, evaluator.evaluateAsDecimal("1.0"));
-		assertEquals(5.0, evaluator.evaluateAsDecimal("2+3.0"));
-		assertEquals(-5.5, evaluator.evaluateAsDecimal("-(2.1+3.4)"));
+		evaluationAsDecimal(evaluator::evaluateAsDecimal);
 	}
 	
 	@Test
