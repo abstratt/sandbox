@@ -122,6 +122,7 @@ class Tests {
 		assertEquals(asList(new PushInt(-1)), emitter.emit("-1"));
 		assertEquals(asList(new PushInt(1), new PushInt(3), new MultInt(), new NegInt()), emitter.emit("-(1*3)"));
 		assertEquals(asList(new PushInt(2), new PushInt(3), new AddInt()), emitter.emit("2+3"));
+		assertEquals(asList(new PushInt(2), new PushInt(-3), new AddInt()), emitter.emit("2-3"));
 		assertEquals(asList(new PushInt(2), new PushInt(3), new PushInt(4), new MultInt(), new AddInt()), //
 				emitter.emit("2+3*4"));
 		assertEquals(asList(new PushInt(2), new IntToDecimal(), new PushDecimal(3.0), new AddDecimal()), //
