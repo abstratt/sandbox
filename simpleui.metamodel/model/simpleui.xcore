@@ -1,0 +1,77 @@
+package simpleui
+
+import org.eclipse.emf.ecore.EClass
+import value.DictionaryValue
+import value.MetadataHolder
+import org.eclipse.emf.ecore.EClassifier
+
+annotation "simpleui/internal" as Internal
+
+class Node extends MetadataHolder {
+    String name
+    @Internal refers Node parent opposite children
+    @Internal contains Node[] children opposite parent
+    @Internal contains DictionaryValue metadata
+    @Internal
+    refers EClass componentType
+    op EClassifier getMetadataType() {
+        componentType
+    }
+}
+
+/**
+ * A container is a component that contain other components.
+ */
+ 
+class Container extends Component{
+    @Internal
+    contains Component[] children opposite parent
+}
+
+class ModuleImport {
+    String importedNamespace
+    derived String importedModule get { importedNamespace }
+}
+
+/** A screen is a top-level container. */
+class Screen extends Container {
+    
+}
+
+/** An application is a set of screens. */
+class Application {
+    contains ModuleImport[] imports
+    String name
+    contains Screen[] screens
+    contains Node[] nodes
+}
+
+/**
+ * A component is a composable user interface element.
+ */
+class Component extends MetadataHolder {
+    String[0..1] name
+    @Internal
+    refers Container parent opposite children
+    @Internal
+    op EClass getComponentType() {
+        return this.eClass
+    }
+    @Internal
+    contains DictionaryValue metadata
+    op EClassifier getMetadataType() {
+        componentType
+    }
+}
+
+
+/* ------------------------ html ------------------------- */
+
+
+class Div extends Container {
+    
+}
+
+class Button extends Component { 
+    String caption
+}
