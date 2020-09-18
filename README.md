@@ -13,6 +13,6 @@ code to learn Java or Kotlin, these may be helpful. If you have any questions, j
 - [expressions](https://github.com/abstratt/sandbox/tree/expressions) - expression parsing and evaluation
 - [expressions-and-bytecodes](https://github.com/abstratt/sandbox/tree/expressions-and-bytecodes) - expression parsing and evaluation augmented with bytecode generation and interpretation.
 - [top-phrases](https://github.com/abstratt/sandbox/tree/top-phrases) - a simple tool for finding the most frequent strings occurring in arbitrarily large files
-- [got-wifi](https://github.com/abstratt/sandbox/tree/got-wifi) - a simple backend with a REST API for finding wifi spots (incomplete)
-- [calories](https://github.com/abstratt/sandbox/tree/calories) - a simple backend with a REST API for recording calories
+- [got-wifi](https://github.com/abstratt/sandbox/tree/got-wifi) - a simple Kotlin backend with a REST API for finding wifi spots (incomplete)
+- [calories](https://github.com/abstratt/sandbox/tree/calories) - a simple Kotlin backend with a REST API for recording calories
 - [various](https://github.com/abstratt/sandbox/tree/various) - various unrelated challenges
