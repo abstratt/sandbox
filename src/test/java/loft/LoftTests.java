@@ -49,12 +49,6 @@ public class LoftTests {
 		assertEquals(new TreeSet<>(Arrays.asList()), new TreeSet<>(solver.findUniqueSubstrings("aabbbabaaa".toCharArray(), 2)));
 		assertEquals(new TreeSet<>(Arrays.asList("aaa", "aab", "aba", "abb", "baa", "bab", "bba", "bbb")), new TreeSet<>(solver.findUniqueSubstrings("aabbbabaaa".toCharArray(), 3)));
 		assertEquals(new TreeSet<>(Arrays.asList("aaaaaaaaa")), new TreeSet<>(solver.findUniqueSubstrings("aaaaaaaaa".toCharArray(), 9)));
-		assertEquals(new TreeSet<>(), new TreeSet<>(solver.findUniqueSubstrings("aabbccddaabbccdd".toCharArray(), 4)));
-		assertEquals(new TreeSet<>(), new TreeSet<>(solver.findUniqueSubstrings("aabbccddaabbccdd".toCharArray(), 5)));
-		assertEquals(new TreeSet<>(), new TreeSet<>(solver.findUniqueSubstrings("aabbccddaabbccdd".toCharArray(), 6)));
-		assertEquals(new TreeSet<>(), new TreeSet<>(solver.findUniqueSubstrings("aabbccddaabbccdd".toCharArray(), 8)));
-		assertEquals(new TreeSet<>(), new TreeSet<>(solver.findUniqueSubstrings("aabbccddaabbccdd".toCharArray(), 15)));
-		assertEquals(new TreeSet<>(Arrays.asList("aabbccddaabbccdd")), new TreeSet<>(solver.findUniqueSubstrings("aabbccddaabbccdd".toCharArray(), 16)));
 	}
 
 }
