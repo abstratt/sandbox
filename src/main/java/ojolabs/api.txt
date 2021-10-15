@@ -1,0 +1,66 @@
+
+
+
+- user can send another user a message
+
+
+
+class User {
+    String handle;
+}
+
+class Message {
+    String fromHandle;
+    String toHandle;
+    String message;
+    Date timeSent;    
+    DeliveryStatus status;
+    @Null ChannelMessage channelMessage;
+}
+
+class ChannelMessage {
+    String fromHandle;
+    String channelHandle;
+    String message;
+    Date timeSent;    
+}
+
+
+enum DeliveredStatus {
+    Pending, Delivered, Read 
+}
+
+class Channel {
+    String name;
+}
+
+class Membership {
+    User member;
+    Channel channel;
+}
+
+
+Posting an 1:1 message:
+
+POST messages/
+
+{ content: "...", user: "someHandle" }
+
+POST channel-messages/
+
+{ content: "...", channel: "someChannelName" }
+
+
+GET channel-messages/?start-time=...
+
+{
+   channel: "channelName",
+   start-time: "UTC date",
+   end-time: "UTC date",
+   messages: [
+       { timestamp: "...", senderHandle: "", content: "" },
+       { timestamp: "...", senderHandle: "", content: "" },
+   ]
+   
+}
+
